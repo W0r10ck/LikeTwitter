@@ -1,4 +1,4 @@
-package com.myproject.liketwitter;
+package com.myproject.liketwitter.controller;
 
 import com.myproject.liketwitter.domain.Message;
 import com.myproject.liketwitter.repos.MessageRepos;
@@ -9,28 +9,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
-public class GreetingController {
+public class MainController {
 
-
-	private static final String MESSAGE_VARIABLE = "message";
+	private static final String MESSAGE_VARIABLE = "messages";
 
 	private final MessageRepos messageRepos;
 
-	public GreetingController(final MessageRepos messageRepos) {
+	public MainController(final MessageRepos messageRepos) {
 		this.messageRepos = messageRepos;
 	}
 
-	@GetMapping("/greeting")
-	public String greeting(@RequestParam(name = "name", required = false, defaultValue = "Hi") String name, Map<String,Object> model) {
-		model.put("name", name);
+	@GetMapping("/")
+	public String greeting(Map<String, Object> model) {
 
 		return "greeting";
 	}
 
-	@GetMapping()
-	public String main( Map<String,Object> model) {
+	@GetMapping("/main")
+	public String main(Map<String, Object> model) {
 
 		var all = messageRepos.findAll();
 		model.put(MESSAGE_VARIABLE, all);
@@ -38,9 +35,14 @@ public class GreetingController {
 		return "main";
 	}
 
+	@GetMapping("/login")
+	public String login(Map<String, Object> model) {
 
-	@PostMapping
-	public String add(@RequestParam String text,@RequestParam String tag, Map<String,Object> model){
+		return "login";
+	}
+
+	@PostMapping("/main")
+	public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
 		var message = Message.init().setText(text).setTag(tag).build();
 
 		messageRepos.save(message);
@@ -51,12 +53,12 @@ public class GreetingController {
 		return "main";
 	}
 
-	@PostMapping("filter")
-	public String filter(@RequestParam String filter, Map<String,Object> model){
+	@PostMapping("/filter")
+	public String filter(@RequestParam String filter, Map<String, Object> model) {
 
 		Iterable<Message> all;
 
-		if(filter != null && !filter.isEmpty()) {
+		if (filter != null && !filter.isEmpty()) {
 			all = messageRepos.findByTag(filter);
 		} else {
 			all = messageRepos.findAll();
@@ -68,10 +70,12 @@ public class GreetingController {
 	}
 
 	@PutMapping
-	public String remove(@RequestParam Long id, Map<String,Object> model){
+	public String remove(@RequestParam Long id, Map<String, Object> model) {
 		var messageOptional = messageRepos.findById(id);
 
-		var message = messageOptional.isPresent() ? messageOptional.get() : Message.init().build();
+		Message message;
+
+		message = messageOptional.orElseGet(() -> Message.init().build());
 
 		messageRepos.delete(message);
 
@@ -80,5 +84,4 @@ public class GreetingController {
 
 		return "main";
 	}
-
 }
