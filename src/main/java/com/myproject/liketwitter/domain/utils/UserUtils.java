@@ -12,6 +12,7 @@ public class UserUtils {
 				.setPassword(userDto.getPassword())
 				.setActive(userDto.isActive())
 				.setRoles(userDto.getRoles())
+				.setId(userDto.getId())
 				.build();
 
 	}

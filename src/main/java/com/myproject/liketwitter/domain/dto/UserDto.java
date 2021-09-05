@@ -15,6 +15,8 @@ import lombok.Setter;
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class UserDto {
 
+	private Long id;
+
 	private String username;
 
 	private String password;
