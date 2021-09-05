@@ -1,12 +1,12 @@
 package com.myproject.liketwitter.controller;
 
-import com.myproject.liketwitter.domain.dto.UserDto;
 import com.myproject.liketwitter.domain.Role;
 import com.myproject.liketwitter.domain.User;
+import com.myproject.liketwitter.domain.dto.UserDto;
 import com.myproject.liketwitter.repos.UserRepos;
 import java.util.Collections;
-import java.util.Map;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,12 +28,12 @@ public class RegistrationController {
 
 
 	@PostMapping("/registration")
-	public String addUser(UserDto userDto, Map<String, Object> model) {
+	public String addUser(UserDto userDto, Model model) {
 
 		User userFromDb = userRepos.findByUsername(userDto.getUsername());
 
 		if (userFromDb != null) {
-			model.put("message", "User exists!");
+			model.addAttribute("message", "User exists!");
 			return "registration";
 		}
 
