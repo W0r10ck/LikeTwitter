@@ -4,9 +4,12 @@
 
 	Add new user
 
-    ${message}
+	<#if message??>
+        ${message}
+	</#if>
 
-    <@l.login "/registration" />
+
+    <@l.login path="/registration" value="Add user"/>
 
 </@c.page>
 
