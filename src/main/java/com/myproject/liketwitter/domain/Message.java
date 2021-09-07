@@ -27,6 +27,8 @@ public class Message {
 
 	private String text;
 
+	private String filename;
+
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
